@@ -1,13 +1,13 @@
 # HybridKKT.jl
 
-A [MadNLP](madnlp) implementation of the [Golub & Greif KKT solver](golub2003).
+A [MadNLP](https://github.com/MadNLP/MadNLP.jl) implementation of the [Golub & Greif KKT solver](https://epubs.siam.org/doi/abs/10.1137/S1064827500375096).
 This package provides an `HybridCondensedKKTSystem` structure for MadNLP,
 with GPU support.
 
 ## Quickstart
 
-We implement using [ExaModels](examodels) the `elec` instance
-from the [COPS benchmark](cops). The problem models the distribution
+We implement using [ExaModels](https://github.com/exanauts/ExaModels.jl) the `elec` instance
+from the [COPS benchmark](https://www.mcs.anl.gov/~more/cops/). The problem models the distribution
 of electrons on a sphere.
 ```julia
 using ExaModels
@@ -94,8 +94,8 @@ stats = MadNLP.solve!(solver)
 ```
 
 If the problem is too large, you can replace Lapack by the
-sparse linear solver [cuDSS](cudss), provided by NVIDIA.
-MadNLP uses the Julia interface [CUDSS.jl](cudssjl).
+sparse linear solver [cuDSS](https://docs.nvidia.com/cuda/cudss/), provided by NVIDIA.
+MadNLP uses the Julia interface [CUDSS.jl](https://github.com/exanauts/CUDSS.jl).
 We recommend using the LDL factorization in cuDSS, as the Cholesky
 solver does not report correctly whether the factorization has succeeded.
 The arguments write:
@@ -118,8 +118,8 @@ stats = MadNLP.solve!(solver)
 
 ## References
 
-- The method has been adapted to interior-point by Shaked Regev et al in [the HyKKT paper](hykkt2023).
-- [We have extended it recently](nlpgpu2024) and have integrated HyKKT as a MadNLP KKT system. For a broad range of problems, the method is faster than a state-of-the-art linear solver running on the CPU.
+- The method has been adapted to interior-point by Shaked Regev et al in [the HyKKT paper](https://www.tandfonline.com/doi/abs/10.1080/10556788.2022.2124990).
+- [We have extended it recently](https://arxiv.org/abs/2405.14236) and have integrated HyKKT as a MadNLP KKT system. For a broad range of problems, the method is faster than a state-of-the-art linear solver running on the CPU.
 
 If you find this package successful in your work, we would greatly
 appreciate you cite this article:
@@ -131,12 +131,3 @@ appreciate you cite this article:
   year={2024}
 }
 ```
-
-[cops]: https://www.mcs.anl.gov/~more/cops/
-[cudss]: https://docs.nvidia.com/cuda/cudss/
-[cudssjl]: https://github.com/exanauts/CUDSS.jl
-[examodels]: https://github.com/exanauts/ExaModels.jl
-[golub2003]: https://epubs.siam.org/doi/abs/10.1137/S1064827500375096
-[hykkt2023]: https://www.tandfonline.com/doi/abs/10.1080/10556788.2022.2124990
-[madnlp]: https://github.com/MadNLP/MadNLP.jl
-[nlpgpu2024]: https://arxiv.org/abs/2405.14236
