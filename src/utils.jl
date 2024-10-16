@@ -1,3 +1,14 @@
+macro elapsed_hykkt(ex)
+    if CUDA.functional()
+        quote
+            CUDA.@elapsed $(esc(ex))
+        end
+    else
+        quote
+            Base.@elapsed $(esc(ex))
+        end
+    end
+end
 
 # Model linear operator G K⁻¹ Gᵀ  (dimension me x me)
 struct SchurComplementOperator{T, VT, SMT, LS}

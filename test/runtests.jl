@@ -1,4 +1,3 @@
-
 using CUDA
 using ExaModels
 using HybridKKT
@@ -17,7 +16,7 @@ function elec_model(np; seed = 2713, T = Float64, backend = nothing, kwargs...)
     theta = (2pi) .* rand(np)
     phi = pi .* rand(np)
 
-    core = ExaModels.ExaCore(T; backend= backend)
+    core = ExaModels.ExaCore(T; backend=backend)
     x = ExaModels.variable(core, 1:np; start = [cos(theta[i])*sin(phi[i]) for i=1:np])
     y = ExaModels.variable(core, 1:np; start = [sin(theta[i])*sin(phi[i]) for i=1:np])
     z = ExaModels.variable(core, 1:np; start = [cos(phi[i]) for i=1:np])
@@ -154,44 +153,46 @@ end
         @test stats.solution ≈ stats_ref.solution atol=1e-6
     end
 
-    nlp_gpu = elec_model(5; backend=CUDABackend())
-    @testset "[CUDA] LapackGPUSolver" begin
-        solver = MadNLPSolver(
-            nlp_gpu;
-            linear_solver=MadNLPGPU.LapackGPUSolver,
-            lapack_algorithm=MadNLP.CHOLESKY,
-            kkt_system=HybridKKT.HybridCondensedKKTSystem,
-            equality_treatment=MadNLP.EnforceEquality,
-            fixed_variable_treatment=MadNLP.MakeParameter,
-            print_level=MadNLP.ERROR,
-            inertia_correction_method=MadNLP.InertiaBased,
-            max_iter=200,
-            tol=1e-5,
-        )
-        solver.kkt.gamma[] = 1e7
-        stats = MadNLP.solve!(solver)
-        @test stats.status == MadNLP.SOLVE_SUCCEEDED
-        @test stats.iter == stats_ref.iter
-        @test Array(stats.solution) ≈ stats_ref.solution atol=1e-6
-    end
-    @testset "[CUDA] MadNLPGPU.CUDSSSolver" begin
-        solver = MadNLPSolver(
-            nlp_gpu;
-            linear_solver=MadNLPGPU.CUDSSSolver,
-            cudss_algorithm=MadNLP.LDL,
-            kkt_system=HybridKKT.HybridCondensedKKTSystem,
-            equality_treatment=MadNLP.EnforceEquality,
-            fixed_variable_treatment=MadNLP.MakeParameter,
-            print_level=MadNLP.ERROR,
-            inertia_correction_method=MadNLP.InertiaBased,
-            max_iter=200,
-            tol=1e-5,
-        )
-        solver.kkt.gamma[] = 1e7
-        stats = MadNLP.solve!(solver)
-        @test stats.status == MadNLP.SOLVE_SUCCEEDED
-        @test stats.iter == stats_ref.iter
-        @test Array(stats.solution) ≈ stats_ref.solution atol=1e-6
+    if CUDA.functional()
+        nlp_gpu = elec_model(5; backend=CUDABackend())
+        @testset "[CUDA] LapackGPUSolver" begin
+            solver = MadNLPSolver(
+                nlp_gpu;
+                linear_solver=MadNLPGPU.LapackGPUSolver,
+                lapack_algorithm=MadNLP.CHOLESKY,
+                kkt_system=HybridKKT.HybridCondensedKKTSystem,
+                equality_treatment=MadNLP.EnforceEquality,
+                fixed_variable_treatment=MadNLP.MakeParameter,
+                print_level=MadNLP.ERROR,
+                inertia_correction_method=MadNLP.InertiaBased,
+                max_iter=200,
+                tol=1e-5,
+            )
+            solver.kkt.gamma[] = 1e7
+            stats = MadNLP.solve!(solver)
+            @test stats.status == MadNLP.SOLVE_SUCCEEDED
+            @test stats.iter == stats_ref.iter
+            @test Array(stats.solution) ≈ stats_ref.solution atol=1e-6
+        end
+        @testset "[CUDA] MadNLPGPU.CUDSSSolver" begin
+            solver = MadNLPSolver(
+                nlp_gpu;
+                linear_solver=MadNLPGPU.CUDSSSolver,
+                cudss_algorithm=MadNLP.LDL,
+                kkt_system=HybridKKT.HybridCondensedKKTSystem,
+                equality_treatment=MadNLP.EnforceEquality,
+                fixed_variable_treatment=MadNLP.MakeParameter,
+                print_level=MadNLP.ERROR,
+                inertia_correction_method=MadNLP.InertiaBased,
+                max_iter=200,
+                tol=1e-5,
+            )
+            solver.kkt.gamma[] = 1e7
+            stats = MadNLP.solve!(solver)
+            @test stats.status == MadNLP.SOLVE_SUCCEEDED
+            @test stats.iter == stats_ref.iter
+            @test Array(stats.solution) ≈ stats_ref.solution atol=1e-6
+        end
     end
 end
 
