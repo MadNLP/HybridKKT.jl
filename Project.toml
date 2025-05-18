@@ -1,6 +1,6 @@
 name = "HybridKKT"
 uuid = "59d292e8-f99c-4495-a4cc-613f4397570f"
-authors = ["fpacaud <francoispacaud8@gmail.com>"]
+authors = ["fpacaud <francoispacaud8@gmail.com>", "amontoison <amontoison@anl.gov>"]
 version = "0.1.0"
 
 [deps]
@@ -14,6 +14,9 @@ MadNLPGPU = "d72a61cc-809d-412f-99be-fd81f4b8a598"
 NLPModels = "a4795742-8479-5a88-8948-cc11e1c8c1a6"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
+[compat]
+Krylov = "0.10.1"
 
 [extras]
 ExaModels = "1037b233-b668-4ce9-9b63-f9f681f55dd2"
