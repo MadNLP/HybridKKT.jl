@@ -125,6 +125,13 @@ end
     test_hybrid_kkt_cpu(nlp, linear_solver)
 end
 
+@testset "[GPU] HybridCondensedKKTSystem" begin
+    nlp = elec_model(5; backend=CUDABackend())
+    linear_solver = MadNLPGPU.LapackGPUSolver
+    # Test HybridKKTSystem is returning the correct result
+    test_hybrid_kkt_cuda(nlp, linear_solver)
+end
+
 @testset "Condensed-space IPM" begin
     # Compute reference solution
     nlp = elec_model(5)
