@@ -1,7 +1,7 @@
 name = "HybridKKT"
 uuid = "59d292e8-f99c-4495-a4cc-613f4397570f"
 authors = ["fpacaud <francoispacaud8@gmail.com>", "amontoison <amontoison@anl.gov>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Atomix = "a9b6321e-bd34-4604-b9c9-b65b8de01458"
@@ -17,6 +17,9 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
 Krylov = "0.10.1"
+MadNLP = "0.8.7"
+MadNLPGPU = "0.7.7"
+julia = "1.10"
 
 [extras]
 ExaModels = "1037b233-b668-4ce9-9b63-f9f681f55dd2"

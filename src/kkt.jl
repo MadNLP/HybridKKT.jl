@@ -71,6 +71,7 @@ function MadNLP.create_kkt_system(
     linear_solver;
     opt_linear_solver=MadNLP.default_options(linear_solver),
     hessian_approximation=MadNLP.ExactHessian,
+    qn_options=MadNLP.QuasiNewtonOptions(),
     cg_algorithm=:cg,
 ) where {T, VT}
 
