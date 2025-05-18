@@ -343,7 +343,7 @@ function MadNLP.solve!(kkt::HybridCondensedKKTSystem{T}, w::MadNLP.AbstractKKTVe
 
     # Solve Schur-complement system with a Krylov iterative method.
     if kkt.etc[:cg_algorithm] ∈ (:cg, :gmres, :cr, :minres, :car)
-        t_cg = @elapsed_hykkt Krylov.solve!(
+        t_cg = @elapsed_hykkt Krylov.krylov_solve!(
             kkt.iterative_linear_solver,
             kkt.S,
             wy;
