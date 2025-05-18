@@ -353,7 +353,7 @@ function MadNLP.solve!(kkt::HybridCondensedKKTSystem{T}, w::MadNLP.AbstractKKTVe
         )
         copyto!(wy, kkt.iterative_linear_solver.x)
     elseif kkt.etc[:cg_algorithm] ∈ (:craigmr, )
-        t_cg = @elapsed_hykkt Krylov.solve!(
+        t_cg = @elapsed_hykkt Krylov.krylov_solve!(
             kkt.iterative_linear_solver,
             kkt.G_csc,
             wy;
