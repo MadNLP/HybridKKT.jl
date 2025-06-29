@@ -1,0 +1,36 @@
+name: GPU tests
+
+on:
+  push:
+    branches:
+      - master
+    tags: '*'
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  test-gpu:
+    env:
+      CUDA_VISIBLE_DEVICES: 1
+      JULIA_DEPOT_PATH: /scratch/github-actions/julia_depot_hybridkkt
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        julia-version: ['lts', '1']
+        julia-arch: [x64]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: ${{ matrix.julia-version }}
+          arch: ${{ matrix.julia-arch }}
+      - name: Create julia depot
+        shell: julia --color=yes {0}
+        run: |
+          julia_depot = ENV["JULIA_DEPOT_PATH"]
+          !isdir(julia_depot) && mkdir(julia_depot)
+      - uses: julia-actions/julia-buildpkg@latest
+      - uses: julia-actions/julia-runtest@latest
