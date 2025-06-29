@@ -22,6 +22,14 @@ function index_copy!(dest::AbstractVector{T}, idx::AbstractVector{Ti}, src::Abst
     end
 end
 
+# Fixed an ambiguity
+function index_copy!(dest::AbstractVector{T}, idx::AbstractVector{T}, src::AbstractVector{T}) where {T<:Integer}
+    @assert length(src) == length(idx)
+    @inbounds for i in eachindex(idx)
+        dest[idx[i]] = src[i]
+    end
+end
+
 "Implement `dest[idx] .= val`."
 function fixed!(dest::AbstractVector{T}, idx::AbstractVector{Ti}, val::T) where {T, Ti<:Integer}
     @inbounds for i in idx
