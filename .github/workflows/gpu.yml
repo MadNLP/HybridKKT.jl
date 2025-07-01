@@ -23,10 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@latest
+      - uses: julia-actions/install-juliaup@v2
         with:
-          version: ${{ matrix.julia-version }}
-          arch: ${{ matrix.julia-arch }}
+          channel: ${{ matrix.julia-version }}
       - name: Create julia depot
         shell: julia --color=yes {0}
         run: |
