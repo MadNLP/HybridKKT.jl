@@ -401,7 +401,7 @@ function MadNLP.solve_refine_wrapper!(
     copyto!(d.values, p.values)
 
     solver.cnt.linear_solver_time += @elapsed_hykkt begin
-        MadNLP.solve_kkt_system!(solver.kkt, d)
+        MadNLP.solve_kkt!(solver.kkt, d)
     end
 
     # Compute backsolve's error
