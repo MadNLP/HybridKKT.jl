@@ -304,7 +304,7 @@ function MadNLP.build_kkt!(kkt::HybridCondensedKKTSystem)
 end
 
 # solve!
-function MadNLP.solve_kkt_system!(kkt::HybridCondensedKKTSystem{T}, w::MadNLP.AbstractKKTVector)  where T
+function MadNLP.solve_kkt!(kkt::HybridCondensedKKTSystem{T}, w::MadNLP.AbstractKKTVector)  where T
     (n,m) = size(kkt.jt_csc)
     mi = length(kkt.ind_ineq)
     G = kkt.G_csc
