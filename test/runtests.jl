@@ -50,9 +50,6 @@ end
 
 function test_hybrid_kkt_cpu(nlp, linear_solver)
     # Callback
-    ind_cons = MadNLP.get_index_constraints(
-        nlp,
-    )
     cb = MadNLP.create_callback(
         MadNLP.SparseCallback,
         nlp,
@@ -60,23 +57,23 @@ function test_hybrid_kkt_cpu(nlp, linear_solver)
 
     # Build reference KKT system (here SparseKKTSystem)
     kkt_ref = MadNLP.create_kkt_system(
-        MadNLP.SparseKKTSystem, cb, ind_cons, linear_solver;
+        MadNLP.SparseKKTSystem, cb, linear_solver;
     )
     initialize_kkt!(kkt_ref, cb)
     MadNLP.factorize!(kkt_ref.linear_solver)
     x_ref = MadNLP.UnreducedKKTVector(kkt_ref)
     MadNLP.full(x_ref) .= 1.0
-    MadNLP.solve!(kkt_ref, x_ref)
+    MadNLP.solve_kkt!(kkt_ref, x_ref)
 
     # Build HybridCondensedKKTSystem
     kkt = MadNLP.create_kkt_system(
-        HybridKKT.HybridCondensedKKTSystem, cb, ind_cons, linear_solver;
+        HybridKKT.HybridCondensedKKTSystem, cb, linear_solver;
     )
     initialize_kkt!(kkt, cb)
-    MadNLP.factorize!(kkt.linear_solver)
+    MadNLP.factorize_kkt!(kkt)
     x = MadNLP.UnreducedKKTVector(kkt)
     MadNLP.full(x) .= 1.0
-    MadNLP.solve!(kkt, x)
+    MadNLP.solve_kkt!(kkt, x)
 
     # Test backsolve returns the same values as with SparseKKTSystem.
     @test x.values ≈ x_ref.values atol=1e-6
@@ -94,22 +91,19 @@ end
 
 function test_hybrid_kkt_cuda(nlp, linear_solver)
     # Callback
-    ind_cons = MadNLP.get_index_constraints(
-        nlp,
-    )
     cb = MadNLP.create_callback(
         MadNLP.SparseCallback,
         nlp,
     )
     # Build HybridCondensedKKTSystem
     kkt = MadNLP.create_kkt_system(
-        HybridKKT.HybridCondensedKKTSystem, cb, ind_cons, linear_solver;
+        HybridKKT.HybridCondensedKKTSystem, cb, linear_solver;
     )
     initialize_kkt!(kkt, cb)
-    MadNLP.factorize!(kkt.linear_solver)
+    MadNLP.factorize_kkt!(kkt)
     x = MadNLP.UnreducedKKTVector(kkt)
     MadNLP.full(x) .= 1.0
-    MadNLP.solve!(kkt, x)
+    MadNLP.solve_kkt!(kkt, x)
     # Test KKT multiplication
     b = MadNLP.UnreducedKKTVector(kkt)
     # TODO: memory fault when calling mul! on the GPU
@@ -128,7 +122,7 @@ end
 if CUDA.functional()
     @testset "[GPU] HybridCondensedKKTSystem" begin
         nlp = elec_model(5; backend=CUDABackend())
-        linear_solver = MadNLPGPU.LapackGPUSolver
+        linear_solver = MadNLPGPU.LapackCUDASolver
         # Test HybridKKTSystem is returning the correct result
         test_hybrid_kkt_cuda(nlp, linear_solver)
     end
@@ -164,10 +158,10 @@ end
 
     if CUDA.functional()
         nlp_gpu = elec_model(5; backend=CUDABackend())
-        @testset "[CUDA] LapackGPUSolver" begin
+        @testset "[CUDA] LapackCUDASolver" begin
             solver = MadNLPSolver(
                 nlp_gpu;
-                linear_solver=MadNLPGPU.LapackGPUSolver,
+                linear_solver=MadNLPGPU.LapackCUDASolver,
                 lapack_algorithm=MadNLP.CHOLESKY,
                 kkt_system=HybridKKT.HybridCondensedKKTSystem,
                 equality_treatment=MadNLP.EnforceEquality,
@@ -204,4 +198,3 @@ end
         end
     end
 end
-

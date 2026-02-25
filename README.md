@@ -83,7 +83,7 @@ the following arguments:
 ```julia
 solver = MadNLPSolver(
     nlp_gpu;
-    linear_solver=MadNLPGPU.LapackGPUSolver,
+    linear_solver=MadNLPGPU.LapackCUDASolver,
     lapack_algorithm=MadNLP.CHOLESKY,
     kkt_system=HybridKKT.HybridCondensedKKTSystem,
     equality_treatment=MadNLP.EnforceEquality,
