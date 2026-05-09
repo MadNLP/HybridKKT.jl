@@ -1,4 +1,4 @@
-using CUDA
+using CUDACore
 using ExaModels
 using HybridKKT
 using LinearAlgebra
@@ -119,7 +119,7 @@ end
     test_hybrid_kkt_cpu(nlp, linear_solver)
 end
 
-if CUDA.functional()
+if CUDACore.functional()
     @testset "[GPU] HybridCondensedKKTSystem" begin
         nlp = elec_model(5; backend=CUDABackend())
         linear_solver = MadNLPGPU.LapackCUDASolver
@@ -156,7 +156,7 @@ end
         @test stats.solution ≈ stats_ref.solution atol=1e-6
     end
 
-    if CUDA.functional()
+    if CUDACore.functional()
         nlp_gpu = elec_model(5; backend=CUDABackend())
         @testset "[CUDA] LapackCUDASolver" begin
             solver = MadNLPSolver(

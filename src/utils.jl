@@ -1,7 +1,7 @@
 macro elapsed_hykkt(ex)
-    if CUDA.functional()
+    if CUDACore.functional()
         quote
-            CUDA.@elapsed $(esc(ex))
+            CUDACore.@elapsed $(esc(ex))
         end
     else
         quote

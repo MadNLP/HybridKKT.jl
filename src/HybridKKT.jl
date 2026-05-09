@@ -10,7 +10,8 @@ import MadNLP
 import MadNLPGPU
 import MadNLP: SparseMatrixCOO, full
 
-using CUDA
+using CUDACore
+using cuSPARSE
 using KernelAbstractions
 import Atomix
 

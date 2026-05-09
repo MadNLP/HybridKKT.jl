@@ -84,7 +84,7 @@ end
         Atomix.@atomic valsG[to_map[k]] += valJ[fr_map[k]]
     end
 end
-function transfer_coef!(G::CUSPARSE.CuSparseMatrixCSC, map::CuVector{Int}, coefs::CuVector{Tv}, ind_eq) where Tv
+function transfer_coef!(G::cuSPARSE.CuSparseMatrixCSC, map::CuVector{Int}, coefs::CuVector{Tv}, ind_eq) where Tv
     valsG = nonzeros(G)
     fill!(valsG, zero(Tv))
     _transfer_coef_kernel!(CUDABackend())(valsG, map, coefs, ind_eq; ndrange=length(map))
