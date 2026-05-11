@@ -421,7 +421,7 @@ end
     GPU specific code (require MadNLPGPU).
 =#
 
-function MadNLP.compress_hessian!(kkt::HybridCondensedKKTSystem{T, VT, MT}) where {T, VT, MT<:CUDA.CUSPARSE.CuSparseMatrixCSC{T, Int32}}
+function MadNLP.compress_hessian!(kkt::HybridCondensedKKTSystem{T, VT, MT}) where {T, VT, MT<:cuSPARSE.CuSparseMatrixCSC{T, Int32}}
     fill!(kkt.hess_com.nzVal, zero(T))
     if length(kkt.ext.hess_com_ptrptr) > 1
         MadNLPGPU._transfer_to_csc_kernel!(CUDABackend())(
@@ -435,7 +435,7 @@ function MadNLP.compress_hessian!(kkt::HybridCondensedKKTSystem{T, VT, MT}) wher
     end
 end
 
-function MadNLP.compress_jacobian!(kkt::HybridCondensedKKTSystem{T, VT, MT}) where {T, VT, MT<:CUDA.CUSOLVER.CuSparseMatrixCSC{T, Int32}}
+function MadNLP.compress_jacobian!(kkt::HybridCondensedKKTSystem{T, VT, MT}) where {T, VT, MT<:cuSPARSE.CuSparseMatrixCSC{T, Int32}}
     fill!(kkt.jt_csc.nzVal, zero(T))
     if length(kkt.ext.jt_csc_ptrptr) > 1 # otherwise error is thrown
         MadNLPGPU._transfer_to_csc_kernel!(CUDABackend())(
