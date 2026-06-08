@@ -1,11 +1,12 @@
 name = "HybridKKT"
 uuid = "59d292e8-f99c-4495-a4cc-613f4397570f"
 authors = ["fpacaud <francoispacaud8@gmail.com>", "amontoison <amontoison@anl.gov>"]
-version = "0.3.0"
+version = "0.4.0"
 
 [deps]
 Atomix = "a9b6321e-bd34-4604-b9c9-b65b8de01458"
 CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+CUDSS = "45b445bb-4962-46a0-9369-b4df9d0f772e"
 KernelAbstractions = "63c18a36-062a-441e-b654-da1e3ab1ce7c"
 Krylov = "ba0b0d4f-ebba-5204-a429-3ac8c609bfb7"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -16,9 +17,11 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
+CUDA = "6"
+CUDSS = "0.7"
 Krylov = "0.10.1"
-MadNLP = "0.9"
-MadNLPGPU = "0.8"
+MadNLP = "0.10"
+MadNLPGPU = "0.10"
 julia = "1.10"
 
 [extras]
