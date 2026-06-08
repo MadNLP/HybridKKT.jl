@@ -1,4 +1,4 @@
-using CUDA
+using CUDA, CUDSS
 using ExaModels
 using HybridKKT
 using LinearAlgebra
