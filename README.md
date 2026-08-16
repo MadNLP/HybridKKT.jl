@@ -1,12 +1,12 @@
 # HybridKKT.jl
 
-A [MadNLP](https://github.com/MadNLP/MadNLP.jl) implementation of the [Golub & Greif KKT solver](https://epubs.siam.org/doi/abs/10.1137/S1064827500375096).
+A [MadNLP](https://github.com/madsuite-org/MadNLP.jl) implementation of the [Golub & Greif KKT solver](https://epubs.siam.org/doi/abs/10.1137/S1064827500375096).
 This package provides an `HybridCondensedKKTSystem` structure for MadNLP,
 with GPU support.
 
 ## Quickstart
 
-We implement using [ExaModels](https://github.com/exanauts/ExaModels.jl) the `elec` instance
+We implement using [ExaModels](https://github.com/madsuite-org/ExaModels.jl) the `elec` instance
 from the [COPS benchmark](https://www.mcs.anl.gov/~more/cops/). The problem models the distribution
 of electrons on a sphere.
 ```julia
